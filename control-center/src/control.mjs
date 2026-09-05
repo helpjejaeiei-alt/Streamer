@@ -78,7 +78,8 @@ export async function control(request,env,installer){
       if(!await env.INSTALLERS.head(env.EXE_OBJECT))return reply({error:'ตัวติดตั้งยังไม่พร้อม'},503);
       const token=randomToken(),expires=now()+1800;
       await env.DB.prepare('INSERT INTO installs(token_hash,license_cipher,expires_at) VALUES(?,?,?)').bind(await sha256(token),await seal(license,env.LICENSE_ENCRYPTION_KEY),expires).run();
-      return reply({command:customerCommand(url.origin,token,await sha256(installer)),expires});
+      const installOrigin = env.INSTALL_API_ORIGIN || url.origin;
+      return reply({command:customerCommand(installOrigin,token,await sha256(installer)),expires});
     }
     if(path==='/control/device/sync'&&request.method==='POST'){
       const {actual,appliedRevision}=await read(request);
