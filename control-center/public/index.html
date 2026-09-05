@@ -26,12 +26,12 @@
       <div class="node-badge"><span class="pulse"></span><span>BB666</span><span>SECURE GATE</span></div>
       <h1><span>streamer+</span><br><span data-i18n="title">ศูนย์ควบคุม</span></h1>
       <p class="lead" data-i18n="lead">ติดตั้งโปรแกรม ตรวจสอบสิทธิ์ และปรับค่าของคุณผ่านเว็บเดียว โดยผูกกับ KeyAuth key ของแต่ละคน</p>
-      <div class="trust-row"><span>UTF-8 <small data-i18n="encoding">รองรับภาษา</small></span><span>TLS <small data-i18n="secure">เข้ารหัส</small></span><span>LIVE <small data-i18n="sync">ซิงก์ค่า</small></span></div>
+      <div class="trust-row"><span>WEB <small data-i18n="encoding">พร้อมใช้งาน</small></span><span>TLS <small data-i18n="secure">เข้ารหัส</small></span><span>LIVE <small data-i18n="sync">ซิงก์ค่า</small></span></div>
     </section>
     <section class="glass auth-card" id="login-view">
       <div class="card-head"><span>SECURE ACCESS</span><i></i><div class="language auth-language" role="group" aria-label="Language"><button class="active" data-lang="th" aria-pressed="true">ไทย</button><button data-lang="en" aria-pressed="false">EN</button></div></div>
       <h2 data-i18n="verify">เริ่มด้วย key ของคุณ</h2>
-      <p data-i18n="verifyHelp">ใช้ KeyAuth key เดียวกับโปรแกรม streamer+</p>
+      <p data-i18n="verifyHelp">กรอก key เพื่อเข้าใช้งาน</p>
       <form id="login-form">
         <label for="license" data-i18n="license">คีย์ใช้งาน</label>
         <div class="key-field"><span>KEY</span><input id="license" type="password" autocomplete="off" maxlength="256" required placeholder="10-32 KEY LICENSE"></div>
@@ -64,10 +64,10 @@
             <button id="stop" type="button" class="danger" data-i18n="stop">หยุดการเล็ง</button>
           </section>
         </div>
-        <div class="save-bar"><p id="dirty-state">ยังไม่มีการแก้ไข</p><div><button id="reload" type="button" class="secondary" data-i18n="reload">โหลดค่าที่บันทึก</button><button class="primary" id="save" type="submit" disabled><span data-i18n="save">บันทึกและส่งไปโปรแกรม</span><b>↗</b></button></div></div>
+        <div class="save-bar"><p id="dirty-state">ยังไม่มีการแก้ไข</p><div><button id="reload" type="button" class="secondary" data-i18n="reload">โหลดค่าที่บันทึก</button><button class="primary" id="save" type="submit" disabled><span data-i18n="save">เซฟการตั้งค่า</span><b>↗</b></button></div></div>
       </form>
       <section class="install-panel">
-        <div><span class="console-kicker">INSTALL & CONNECT</span><h3 data-i18n="installTitle">ติดตั้งบนเครื่องของคุณ</h3><p data-i18n="installHelp">สร้างคำสั่ง วางใน PowerShell ยอมรับ UAC แล้วโปรแกรมจะตรวจ key ให้อัตโนมัติ</p><small data-i18n="installNote">คำสั่งใช้ได้ครั้งเดียว มีอายุ 30 นาที</small></div>
+        <div><span class="console-kicker">INSTALL & CONNECT</span><h3 data-i18n="installTitle">ติดตั้งบนเครื่องของคุณ</h3><p data-i18n="installHelp">สร้างคำสั่งติดตั้งสำหรับเครื่องนี้</p><small data-i18n="installNote">คำสั่งใช้ได้ครั้งเดียว มีอายุ 30 นาที</small></div>
         <div class="install-action"><button class="primary" id="install"><span data-i18n="install">สร้างคำสั่งติดตั้ง</span><b>↗</b></button><p id="install-message" class="message" role="status"></p></div>
         <div id="command-box" hidden><label for="command" data-i18n="commandLabel">คำสั่งเฉพาะ key ของคุณ</label><textarea id="command" readonly rows="3" spellcheck="false"></textarea><button id="copy" type="button" class="secondary" data-i18n="copy">คัดลอกคำสั่ง</button></div>
       </section>
@@ -76,4 +76,5 @@
   <footer><span>BB666 · streamer+</span><span data-i18n="footer">ค่าตั้งแยกตาม key · ตรวจสิทธิ์ด้วย KeyAuth</span></footer>
 </body>
 </html>
+
 
