@@ -1,6 +1,6 @@
 # เว็บควบคุม streamer+
 
-เว็บใช้งาน: https://streamer-install-api.babybadx7.workers.dev/
+เว็บใช้งาน: https://thtopppppp666.lat/
 
 ลูกค้ากรอก License key ของตัวเอง แล้วกดสร้างคำสั่งติดตั้ง คัดลอกไป PowerShell และยอมรับ UAC โปรแกรมรุ่นใหม่จะติดตั้งและตรวจ key อัตโนมัติ เจ้าของไม่ต้องกรอก key แทนลูกค้า
 

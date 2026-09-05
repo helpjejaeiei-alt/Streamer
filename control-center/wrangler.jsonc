@@ -4,6 +4,12 @@
   "compatibility_date": "2026-09-05",
   "account_id": "66717ff12038631dfc0a598918a5c91a",
   "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "thtopppppp666.lat",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
