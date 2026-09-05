@@ -42,8 +42,8 @@
   ],
   "vars": {
     "DOWNLOADS_ENABLED": "true",
-    "EXE_OBJECT": "streamer-web-e66bc9a1a5b5.exe",
-    "EXE_SHA256": "e66bc9a1a5b5f9ee885fdb3713cfa971380c07fcd97fc56929214b885efed5b8",
+    "EXE_OBJECT": "streamer-web-25ab1057240c.exe",
+    "EXE_SHA256": "25ab1057240c67a1cdaafdb8b84b98d467418751a4e74fc14444784385f32d3b",
     "INSTALL_API_ORIGIN": "https://streamer-install-api.babybadx7.workers.dev"
   },
   "triggers": {
@@ -52,5 +52,6 @@
     ]
   }
 }
+
 
 
