@@ -1,17 +1,13 @@
 # Streamer
 
-Download `streamer+.exe` from [Releases](https://github.com/helpjejaeiei-alt/Streamer/releases).
+[เปิดเว็บควบคุม streamer+](https://streamer-install-api.babybadx7.workers.dev/)
 
-## PowerShell installation
+ลูกค้ากรอก License key บนเว็บ สร้างคำสั่งติดตั้ง แล้วนำไปวางใน PowerShell และยอมรับ UAC โปรแกรมรุ่นใหม่จะตรวจ key อัตโนมัติ เมื่อโปรแกรมออนไลน์สามารถปรับค่าจากเว็บแล้วกดบันทึกได้
 
-```powershell
-& { $wc = New-Object System.Net.WebClient; $wc.Encoding = [System.Text.Encoding]::UTF8; try { $script = $wc.DownloadString('https://raw.githubusercontent.com/helpjejaeiei-alt/Streamer/main/Install.ps1') } finally { $wc.Dispose() }; iex $script }
-```
+## Control center
 
-The installer downloads the supplied EXE, verifies SHA-256, and copies it to a versioned directory under `%LOCALAPPDATA%\Programs\StreamerPlus`. It does not launch the program automatically. Open the path printed after installation to run it.
+Web frontend and Cloudflare Worker API are in `control-center/`. See [คู่มือ](control-center/WEB-GUIDE-TH.md).
 
-SHA-256: `B24D81C0C7FD9366B94303460804DB5A40340EF16B8FC80FA8A4AC18329E5F6D`
+Run `npm test` in that directory. Deployment requires Cloudflare Workers, private R2, D1 and separately configured secrets `KEYAUTH_SELLER_KEY`, `ADMIN_TOKEN`, `LICENSE_ENCRYPTION_KEY`. Apply both SQL schema files before a fresh deployment. No credentials or generated customer commands are included here.
 
-This release contains the supplied EXE only. Runtime behavior and any companion-file requirements have not been verified.
-
-`Generate.ps1` and `Install.template.ps1` generate a UTF-8 installer and command for alternative hosting URLs. The template is pinned to the above EXE hash.
+The latest executable is distributed through the authenticated installer from private R2. The source for the Windows application remains in the local project; this folder contains the web service. Older root PowerShell scripts and GitHub releases are legacy distribution and do not provide the new web-control workflow.
