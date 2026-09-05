@@ -4,11 +4,19 @@ import {readFile} from 'node:fs/promises';
 import {DatabaseSync} from 'node:sqlite';
 import {control,defaults,validConfig,customerCommand} from '../src/control.mjs';
 import {randomToken} from '../src/security.mjs';
-test('configuration validation rejects unsafe and unknown fields',()=>{
+test('configuration validation rejects unsafe and unknown fields',async()=>{
   assert.equal(validConfig(defaults),true);
   for(const c of [{...defaults,fovSize:641},{...defaults,sensitivity:Infinity},{...defaults,aim:'true'},{...defaults,command:'anything'},{...defaults,aimButton:'Middle'}])assert.equal(validConfig(c),false);
   const command=customerCommand('https://installer.example','a'.repeat(64),'b'.repeat(64));
   assert.ok(command.startsWith('powershell '));
+  const encoded=command.match(/FromBase64String\('([^']+)'\)/)[1];
+  const script=Buffer.from(encoded,'base64').toString('utf8');
+  const installerScript=await readFile(new URL('../src/install.ps1',import.meta.url),'utf8');
+  assert.match(script,/Windows\.Forms/);
+  assert.match(script,/ติดตั้งไม่สำเร็จ/);
+  assert.match(installerScript,/Windows\.Forms/);
+  assert.match(installerScript,/ติดตั้งสำเร็จ/);
+  assert.match(installerScript,/ติดตั้งไม่สำเร็จ/);
   assert.ok(!command.includes('ADMIN_TOKEN'));
 });
 test('web and device sessions isolate keys; CSRF, revisions, ack and rate limit',async()=>{

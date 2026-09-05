@@ -1,6 +1,10 @@
 param([Parameter(Mandatory=$true)][string]$Api,[Parameter(Mandatory=$true)][string]$Token,[Parameter(Mandatory=$true)][string]$ExpectedSid)
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
+Add-Type -AssemblyName System.Windows.Forms
+function Show-InstallMessage([string]$Text,[string]$Title,[string]$Icon) {
+    [Windows.Forms.MessageBox]::Show($Text,$Title,[Windows.Forms.MessageBoxButtons]::OK,[Windows.Forms.MessageBoxIcon]::$Icon) | Out-Null
+}
 try {
     if (([Uri]$Api).Scheme -ne 'https' -or $Token -notmatch '^[a-f0-9]{64}$') { throw 'Invalid installation request' }
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -29,7 +33,9 @@ try {
     } finally { [Array]::Clear($licenseBytes,0,$licenseBytes.Length); $info.license = $null }
     Start-Process -FilePath $target -WorkingDirectory $destination
     Write-Host 'Installed. Starting streamer+...'
+    Show-InstallMessage 'ติดตั้งสำเร็จ กำลังเปิด streamer+' 'streamer+' 'Information'
 } catch {
     Write-Host 'Installation could not finish. Contact support for a new installation command.' -ForegroundColor Red
+    Show-InstallMessage 'ติดตั้งไม่สำเร็จ กรุณาสร้างคำสั่งใหม่แล้วลองอีกครั้ง' 'streamer+' 'Error'
     exit 1
 }

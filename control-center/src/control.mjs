@@ -32,9 +32,15 @@ async function authenticate(request,env,kind){
   }
   return s;
 }
+function base64Utf8(text){
+  const bytes=new TextEncoder().encode(text);
+  let binary='';
+  for(const byte of bytes)binary+=String.fromCharCode(byte);
+  return btoa(binary);
+}
 export function customerCommand(origin,token,scriptHash){
-  const script=`$ErrorActionPreference='Stop'\n$p=Join-Path ([IO.Path]::GetTempPath()) ([Guid]::NewGuid().ToString('N')+'.ps1')\ntry {\n$w=New-Object Net.WebClient\ntry{$w.DownloadFile('${origin}/install.ps1',$p)}finally{$w.Dispose()}\nif((Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash -ne '${scriptHash}'){throw 'Verification failed'}\n$sid=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value\n$q=$p.Replace("'","''")\n$r="& ([scriptblock]::Create([IO.File]::ReadAllText('"+$q+"'))) -Api '${origin}' -Token '${token}' -ExpectedSid '"+$sid+"'"\n$a='-NoProfile -EncodedCommand '+[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($r))\n$x=Start-Process powershell.exe -Verb RunAs -ArgumentList $a -Wait -PassThru\nif($x.ExitCode -ne 0){Write-Host 'Installation did not complete. Contact support.'}\n}catch{Write-Host 'Installation did not complete. Contact support.'}finally{if(Test-Path -LiteralPath $p){Remove-Item -LiteralPath $p -Force}}`;
-  return `powershell "iex ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${btoa(script)}')))"`;
+  const script=`$ErrorActionPreference='Stop'\nAdd-Type -AssemblyName System.Windows.Forms\nfunction Show-InstallMessage([string]$Text,[string]$Title,[string]$Icon){[Windows.Forms.MessageBox]::Show($Text,$Title,[Windows.Forms.MessageBoxButtons]::OK,[Windows.Forms.MessageBoxIcon]::$Icon)|Out-Null}\n$p=Join-Path ([IO.Path]::GetTempPath()) ([Guid]::NewGuid().ToString('N')+'.ps1')\ntry {\n$w=New-Object Net.WebClient\ntry{$w.DownloadFile('${origin}/install.ps1',$p)}finally{$w.Dispose()}\nif((Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash -ne '${scriptHash}'){throw 'Verification failed'}\n$sid=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value\n$q=$p.Replace("'","''")\n$r="& ([scriptblock]::Create([IO.File]::ReadAllText('"+$q+"'))) -Api '${origin}' -Token '${token}' -ExpectedSid '"+$sid+"'"\n$a='-NoProfile -EncodedCommand '+[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($r))\n$x=Start-Process powershell.exe -Verb RunAs -ArgumentList $a -Wait -PassThru\nif($x.ExitCode -ne 0){Show-InstallMessage 'ติดตั้งไม่สำเร็จ กรุณาสร้างคำสั่งใหม่แล้วลองอีกครั้ง' 'streamer+' 'Error'}\n}catch{Show-InstallMessage 'ติดตั้งไม่สำเร็จ กรุณาสร้างคำสั่งใหม่แล้วลองอีกครั้ง' 'streamer+' 'Error'}finally{if(Test-Path -LiteralPath $p){Remove-Item -LiteralPath $p -Force}}`;
+  return `powershell "iex ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${base64Utf8(script)}')))"`;
 }
 export async function control(request,env,installer){
   const url=new URL(request.url),path=url.pathname;
