@@ -1,11 +1,78 @@
 <!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>streamer+ · Control Center</title><link rel="stylesheet" href="/assets/control.css"><script type="module" src="/assets/control.js"></script></head>
-<body><a class="skip" href="#main">ข้ามไปเนื้อหา</a><header><a class="brand" href="/"><img src="/assets/bb666-logo-transparent.png" alt="BB666"><span>streamer<span class="accent">+</span></span></a><span class="header-caption">CONTROL CENTER</span><button id="logout" class="quiet" hidden>ออกจากระบบ</button></header>
-<main id="main"><section class="intro"><div><p class="eyebrow">YOUR SETUP. YOUR CONTROL.</p><h1>ปรับทุกอย่าง<br><span class="accent">จากที่เดียว.</span></h1><p class="lede">ติดตั้งโปรแกรมและจัดการค่าของคุณผ่านเว็บ<br>เชื่อมต่อกับ key เดิม ไม่ต้องตั้งค่าทีละเครื่อง</p></div><div class="access" id="login-view"><span class="section-note">เข้าสู่แผงควบคุม</span><h2>เริ่มด้วย key ของคุณ</h2><p>ใช้ KeyAuth key เดียวกับโปรแกรม streamer+</p><form id="login-form"><label for="license">คีย์ใช้งาน</label><input id="license" type="password" autocomplete="off" maxlength="256" required placeholder="กรอก license key"><button class="primary" id="login-button">เข้าสู่ระบบ <span aria-hidden="true">↗</span></button></form><p id="login-message" role="status"></p><small>การเข้าเว็บไม่เริ่มอายุ key ใหม่<br>สิทธิ์จะถูกตรวจอีกครั้งเมื่อเปิดโปรแกรม</small></div></section>
-<section id="dashboard" hidden><div class="dash-head"><div><p class="eyebrow">LIVE CONFIGURATION</p><h2>แผงควบคุมของคุณ</h2></div><div class="device-status"><span id="status-dot"></span><span id="device-status">ยังไม่พบโปรแกรมออนไลน์</span></div></div>
-<p class="sync-message" id="sync-status" role="status">โหลดค่าตั้ง...</p>
-<form id="config-form"><div class="workspace"><section class="panel"><div class="panel-head"><h3>การเล็งและการแสดงผล</h3><span>CONTROLS</span></div><div id="toggles"></div><div class="range-setting"><div><label for="fovSize">ขนาด FOV</label><output for="fovSize" id="fov-value">640</output></div><input type="range" id="fovSize" min="40" max="640" step="10"><div class="range-labels"><span>40</span><span>640 px</span></div></div><div class="range-setting"><div><label for="sensitivity">Sensitivity</label><output for="sensitivity" id="sensitivity-value">0.50</output></div><input type="range" id="sensitivity" min="0.01" max="1" step="0.01"><div class="range-labels"><span>0.01</span><span>1.00</span></div></div></section>
-<section class="panel"><div class="panel-head"><h3>ปุ่มและเมนู</h3><span>INPUT</span></div><label class="field-title" for="aimButton">ปุ่มกดเล็ง</label><select id="aimButton"><option value="Right">เมาส์ขวา</option><option value="Left">เมาส์ซ้าย</option></select><label class="toggle-row"><span><strong>แสดงเมนูบนเครื่อง</strong><small>เหมือนปุ่ม Home ในโปรแกรม</small></span><input type="checkbox" id="menuVisible" role="switch"></label><div class="preview" aria-label="ตัวอย่างขนาด FOV ไม่ใช่ภาพจากเกม"><div id="fov-preview"></div><span class="crosshair">+</span><span class="preview-caption">ตัวอย่างขนาด FOV</span></div><p class="hint">ค่าจริงจะเปลี่ยนเมื่อโปรแกรมออนไลน์<br>ปุ่มลัดในโปรแกรมยังใช้งานได้ตามเดิม</p><button id="stop" type="button" class="danger">หยุดการเล็ง</button></section></div>
-<div class="save-bar"><p id="dirty-state">ยังไม่มีการแก้ไข</p><div><button id="reload" type="button" class="quiet">โหลดค่าที่บันทึก</button><button class="primary" id="save" type="submit" disabled>บันทึกและส่งไปโปรแกรม</button></div></div></form>
-<section class="install-panel"><div><p class="eyebrow">INSTALL & CONNECT</p><h3>ติดตั้งบนเครื่องของคุณ</h3><p>สร้างคำสั่ง → วางใน PowerShell → ยอมรับ UAC<br>โปรแกรมจะเปิดและตรวจ key ให้อัตโนมัติ</p><small>คำสั่งใช้ได้ครั้งเดียว มีอายุ 30 นาที</small></div><div class="install-action"><button class="primary" id="install">สร้างคำสั่งติดตั้ง <span aria-hidden="true">↗</span></button><p id="install-message" role="status"></p></div><div id="command-box" hidden><label for="command">คำสั่งเฉพาะ key ของคุณ</label><textarea id="command" readonly rows="3" spellcheck="false"></textarea><button id="copy" type="button" class="quiet">คัดลอกคำสั่ง</button></div></section></section>
-<footer><span>streamer+ / BB666</span><span>ค่าตั้งแยกตาม key · ตรวจสิทธิ์ด้วย KeyAuth</span></footer></main></body></html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#020202">
+  <title>streamer+ · Control Center</title>
+  <link rel="preload" href="/assets/fonts/noto-sans-thai-regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/assets/fonts/noto-sans-thai-medium.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/assets/control.css">
+  <script type="module" src="/assets/control.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">ข้ามไปเนื้อหา</a>
+  <div class="ambient" aria-hidden="true"><i></i><i></i></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="streamer+ home"><img src="/assets/bb666-logo-transparent.png" alt=""><span><b>streamer+</b><small>CONTROL CENTER</small></span></a>
+    <nav aria-label="Tools">
+      <div class="language" role="group" aria-label="Language"><button class="active" data-lang="th" aria-pressed="true">ไทย</button><button data-lang="en" aria-pressed="false">EN</button></div>
+      <span class="online"><i></i><span data-i18n="online">ระบบออนไลน์</span></span>
+      <button id="logout" class="ghost" hidden data-i18n="logout">ออกจากระบบ</button>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="intro">
+      <div class="node-badge"><span class="pulse"></span><span>BB666</span><span>SECURE GATE</span></div>
+      <h1><span>streamer+</span><br><span data-i18n="title">ศูนย์ควบคุม</span></h1>
+      <p class="lead" data-i18n="lead">ติดตั้งโปรแกรม ตรวจสอบสิทธิ์ และปรับค่าของคุณผ่านเว็บเดียว โดยผูกกับ KeyAuth key ของแต่ละคน</p>
+      <div class="trust-row"><span>UTF-8 <small data-i18n="encoding">รองรับภาษา</small></span><span>TLS <small data-i18n="secure">เข้ารหัส</small></span><span>LIVE <small data-i18n="sync">ซิงก์ค่า</small></span></div>
+    </section>
+    <section class="glass auth-card" id="login-view">
+      <div class="card-head"><span>SECURE ACCESS</span><i></i><div class="language auth-language" role="group" aria-label="Language"><button class="active" data-lang="th" aria-pressed="true">ไทย</button><button data-lang="en" aria-pressed="false">EN</button></div></div>
+      <h2 data-i18n="verify">เริ่มด้วย key ของคุณ</h2>
+      <p data-i18n="verifyHelp">ใช้ KeyAuth key เดียวกับโปรแกรม streamer+</p>
+      <form id="login-form">
+        <label for="license" data-i18n="license">คีย์ใช้งาน</label>
+        <div class="key-field"><span>KEY</span><input id="license" type="password" autocomplete="off" maxlength="256" required placeholder="KeyAuth license"></div>
+        <button class="primary" id="login-button" type="submit"><span data-i18n="enter">เข้าสู่ระบบ</span><b>↗</b></button>
+      </form>
+      <p id="login-message" class="message" role="status"></p>
+      <small data-i18n="loginNote">การเข้าเว็บไม่เริ่มอายุ key ใหม่ สิทธิ์จะถูกตรวจอีกครั้งเมื่อเปิดโปรแกรม</small>
+    </section>
+    <section class="console" id="dashboard" hidden>
+      <div class="console-heading">
+        <div><span class="console-kicker">LIVE CONFIGURATION</span><h2 data-i18n="dashTitle">แผงควบคุมของคุณ</h2></div>
+        <div class="device-status"><span id="status-dot"></span><span id="device-status">ยังไม่พบโปรแกรมออนไลน์</span></div>
+      </div>
+      <p class="sync-message" id="sync-status" role="status">โหลดค่าตั้ง...</p>
+      <form id="config-form">
+        <div class="workspace">
+          <section class="panel">
+            <div class="panel-head"><h3 data-i18n="controls">การเล็งและการแสดงผล</h3><span>CONTROLS</span></div>
+            <div id="toggles"></div>
+            <div class="range-setting"><div><label for="fovSize" data-i18n="fovSize">ขนาด FOV</label><output for="fovSize" id="fov-value">640</output></div><input type="range" id="fovSize" min="40" max="640" step="10"><div class="range-labels"><span>40</span><span>640 px</span></div></div>
+            <div class="range-setting"><div><label for="sensitivity">Sensitivity</label><output for="sensitivity" id="sensitivity-value">0.50</output></div><input type="range" id="sensitivity" min="0.01" max="1" step="0.01"><div class="range-labels"><span>0.01</span><span>1.00</span></div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3 data-i18n="input">ปุ่มและเมนู</h3><span>INPUT</span></div>
+            <label class="field-title" for="aimButton" data-i18n="aimButton">ปุ่มกดเล็ง</label>
+            <select id="aimButton"><option value="Right" data-i18n="rightMouse">เมาส์ขวา</option><option value="Left" data-i18n="leftMouse">เมาส์ซ้าย</option></select>
+            <label class="toggle-row"><span><strong data-i18n="menuVisible">แสดงเมนูบนเครื่อง</strong><small data-i18n="menuHint">เหมือนปุ่ม Home ในโปรแกรม</small></span><input type="checkbox" id="menuVisible" role="switch"></label>
+            <div class="preview" aria-label="FOV preview"><div id="fov-preview"></div><span class="crosshair">+</span><span class="preview-caption" data-i18n="preview">ตัวอย่างขนาด FOV</span></div>
+            <p class="hint" data-i18n="hint">ค่าจริงจะเปลี่ยนเมื่อโปรแกรมออนไลน์ ปุ่มลัดในโปรแกรมยังใช้งานได้ตามเดิม</p>
+            <button id="stop" type="button" class="danger" data-i18n="stop">หยุดการเล็ง</button>
+          </section>
+        </div>
+        <div class="save-bar"><p id="dirty-state">ยังไม่มีการแก้ไข</p><div><button id="reload" type="button" class="secondary" data-i18n="reload">โหลดค่าที่บันทึก</button><button class="primary" id="save" type="submit" disabled><span data-i18n="save">บันทึกและส่งไปโปรแกรม</span><b>↗</b></button></div></div>
+      </form>
+      <section class="install-panel">
+        <div><span class="console-kicker">INSTALL & CONNECT</span><h3 data-i18n="installTitle">ติดตั้งบนเครื่องของคุณ</h3><p data-i18n="installHelp">สร้างคำสั่ง วางใน PowerShell ยอมรับ UAC แล้วโปรแกรมจะตรวจ key ให้อัตโนมัติ</p><small data-i18n="installNote">คำสั่งใช้ได้ครั้งเดียว มีอายุ 30 นาที</small></div>
+        <div class="install-action"><button class="primary" id="install"><span data-i18n="install">สร้างคำสั่งติดตั้ง</span><b>↗</b></button><p id="install-message" class="message" role="status"></p></div>
+        <div id="command-box" hidden><label for="command" data-i18n="commandLabel">คำสั่งเฉพาะ key ของคุณ</label><textarea id="command" readonly rows="3" spellcheck="false"></textarea><button id="copy" type="button" class="secondary" data-i18n="copy">คัดลอกคำสั่ง</button></div>
+      </section>
+    </section>
+  </main>
+  <footer><span>BB666 · streamer+</span><span data-i18n="footer">ค่าตั้งแยกตาม key · ตรวจสิทธิ์ด้วย KeyAuth</span></footer>
+</body>
+</html>
