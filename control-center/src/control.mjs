@@ -52,10 +52,10 @@ export async function control(request,env,installer){
       const {license}=await read(request);
       if(typeof license!=='string'||!license.trim()||license.length>256)return reply({error:'กรุณากรอก key ให้ครบ'},400);
       if(!await validateLicense(license.trim(),env.KEYAUTH_SELLER_KEY))return reply({error:'key ไม่ถูกต้อง หมดอายุ หรือถูกระงับ'},401);
-      const token=randomToken(),id=await sha256(license.trim()),kind=isWeb?'web':'device';
-      await env.DB.prepare('INSERT INTO control_sessions VALUES(?,?,?,?,?,?)').bind(await sha256(token),id,await seal(license.trim(),env.LICENSE_ENCRYPTION_KEY),kind,now()+43200,now()).run();
+      const token=randomToken(),id=await sha256(license.trim()),kind=isWeb?'web':'device',expires=now()+43200;
+      await env.DB.prepare('INSERT INTO control_sessions VALUES(?,?,?,?,?,?)').bind(await sha256(token),id,await seal(license.trim(),env.LICENSE_ENCRYPTION_KEY),kind,expires,now()).run();
       await env.DB.prepare('INSERT OR IGNORE INTO control_settings VALUES(?,1,?)').bind(id,JSON.stringify(defaults)).run();
-      return isWeb?reply({ok:true},200,{'Set-Cookie':`streamer_sid=${token}; Path=/control/web; HttpOnly; Secure; SameSite=Strict; Max-Age=43200`}):reply({token});
+      return isWeb?reply({ok:true,expires},200,{'Set-Cookie':`streamer_sid=${token}; Path=/control/web; HttpOnly; Secure; SameSite=Strict; Max-Age=43200`}):reply({token,expires});
     }
     const session=await authenticate(request,env,isWeb?'web':'device');
     if(!session)return reply({error:'กรุณาเข้าสู่ระบบอีกครั้ง'},401);

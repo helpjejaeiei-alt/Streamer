@@ -28,6 +28,10 @@ test('web and device sessions isolate keys; CSRF, revisions, ack and rate limit'
   const req=(path,data,headers={})=>control(new Request('https://installer.example/control/'+path,{method:data===undefined?'GET':'POST',headers:{Origin:'https://installer.example','Content-Type':'application/json',...headers},...(data===undefined?{}:{body:JSON.stringify(data)})}),env,'test installer');
   try{
     const a=await req('web/login',{license:'KEY-A'}), b=await req('web/login',{license:'KEY-B'});
+    const loginBody=await a.clone().json();
+    assert.equal(loginBody.ok,true);
+    assert.equal(Number.isInteger(loginBody.expires),true);
+    assert.ok(loginBody.expires>Math.floor(Date.now()/1000));
     const cookieA=a.headers.get('set-cookie').split(';')[0],cookieB=b.headers.get('set-cookie').split(';')[0];
     const desired={...defaults,aim:true,sensitivity:0.25};
     assert.equal((await req('web/config',{config:desired,revision:1},{Cookie:cookieA,Origin:'https://evil.example'})).status,403);
@@ -45,3 +49,5 @@ test('web and device sessions isolate keys; CSRF, revisions, ack and rate limit'
     let last;for(let i=0;i<13;i++)last=await req('web/login',{license:'KEY-A'});assert.equal(last.status,429);
   }finally{globalThis.fetch=old;db.close();}
 });
+
+
