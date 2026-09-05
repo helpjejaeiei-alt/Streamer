@@ -15,7 +15,7 @@ test('configuration validation rejects unsafe and unknown fields',async()=>{
   assert.match(script,/Windows\.Forms/);
   assert.match(script,/ติดตั้งไม่สำเร็จ/);
   assert.match(installerScript,/Windows\.Forms/);
-  assert.match(installerScript,/ติดตั้งสำเร็จ/);
+  assert.doesNotMatch(installerScript,/ติดตั้งสำเร็จ/);
   assert.match(installerScript,/ติดตั้งไม่สำเร็จ/);
   assert.ok(!command.includes('ADMIN_TOKEN'));
 });

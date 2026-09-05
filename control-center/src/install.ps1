@@ -33,7 +33,6 @@ try {
     } finally { [Array]::Clear($licenseBytes,0,$licenseBytes.Length); $info.license = $null }
     Start-Process -FilePath $target -WorkingDirectory $destination
     Write-Host 'Installed. Starting streamer+...'
-    Show-InstallMessage 'ติดตั้งสำเร็จ กำลังเปิด streamer+' 'streamer+' 'Information'
 } catch {
     Write-Host 'Installation could not finish. Contact support for a new installation command.' -ForegroundColor Red
     Show-InstallMessage 'ติดตั้งไม่สำเร็จ กรุณาสร้างคำสั่งใหม่แล้วลองอีกครั้ง' 'streamer+' 'Error'
